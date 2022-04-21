@@ -11,7 +11,7 @@ yarn ou npm
 yarn run dev ou npm run dev
 ```
 
-Criar arquivo abaixo na raiz do projeto e inserir o conteúdo do .env.dist dentro do .env
+Criar arquivo abaixo na raiz do projeto e inserir o conteúdo do .env.dist dentro arquivo criado
 ```
 .env
 ```
