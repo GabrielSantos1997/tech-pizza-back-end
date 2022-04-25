@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Sequelize = require('sequelize');
 
 class UserController {
     async new(req, res) {
@@ -13,9 +14,11 @@ class UserController {
     }
 
     async list(req, res) {
-        const users = await User.findAll({
+        const Op = Sequelize.Op;
+
+        var query = {
             where: {
-                isActive: true,
+                isActive: true
             },
             attributes: [
                 'id',
@@ -23,7 +26,43 @@ class UserController {
                 'email',
                 'createdAt',
             ]
-        });
+        };
+
+        var search = req.query.search;
+        var name = req.query.name;
+        var email = req.query.email;
+
+        if (search && !name && !email) {
+            query.where = {
+                ...query.where,
+                [Op.or]: [
+                    {
+                        name: {
+                            [Op.like]: `%${search}%`
+                        }
+                    },
+                    {
+                        email: {
+                            [Op.like]: `%${search}%`
+                        }
+                     }
+                ]
+             }
+        }
+
+        if (name) {
+            query.where.name = {
+                [Op.like]: `%${name}%`
+            }
+        }
+
+        if (email) {
+            query.where.email = {
+                [Op.like]: `%${email}%`
+            }
+        }
+
+        const users = await User.findAll(query);
 
         return res.json(users);
     }
@@ -49,7 +88,6 @@ class UserController {
         User.update({
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password
         }, {
             where: {
                 id: id
@@ -119,6 +157,40 @@ class UserController {
         })
         .then(function() {
             return res.status(200).json({ success: 'Usuário removido com sucesso!' });
+        }).catch((error) => {
+            return res.status(500).json({ error: error });
+        })
+
+        return res.status(204);
+    }
+
+    async changePassword(req, res) {
+        const id = req.params.id;
+
+        if (isNaN(id)) {
+            return res.status(400).json({ error: 'Id não identificado!' });
+        }
+
+        const user = await User.findOne({
+            where: {
+                id: id,
+                isActive: true
+            }
+        });
+
+        if (!user) {
+            return res.status(404).json({ error: 'Usuário não encontrado!' })
+        }
+
+        User.update({
+            password: req.body.password,
+        }, {
+            where: {
+                id: id
+            }
+        })
+        .then(function() {
+            return res.status(200).json({ success: 'Senha alterada com sucesso!' });
         }).catch((error) => {
             return res.status(500).json({ error: error });
         })
