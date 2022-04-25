@@ -32,6 +32,10 @@ class UserController {
         var name = req.query.name;
         var email = req.query.email;
 
+        var sortDirection = req.query.direction;
+        var sortName = req.query.name;
+        var sortEmail = req.query.email;
+
         if (search && !name && !email) {
             query.where = {
                 ...query.where,
@@ -60,6 +64,18 @@ class UserController {
             query.where.email = {
                 [Op.like]: `%${email}%`
             }
+        }
+
+        if (sortName) {
+            query.order = [
+                ['name', sortDirection],
+            ]
+        }
+
+        if (sortEmail) {
+            query.order = [
+                ['email', sortDirection],
+            ]
         }
 
         const users = await User.findAll(query);
