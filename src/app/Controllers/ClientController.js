@@ -10,7 +10,12 @@ class ClientController {
             name: client.dataValues.name,
             email: client.dataValues.email,
             phoneNumber: client.dataValues.phoneNumber,
-            occupation: client.dataValues.occupation ? client.dataValues.occupation : "UNSPECIFIED",
+            zipCode: client.dataValues.zipCode,
+            state: client.dataValues.state,
+            city: client.dataValues.city,
+            address: client.dataValues.address,
+            number: client.dataValues.number,
+            complement: client.dataValues.complement,
         });
     }
 
@@ -39,8 +44,6 @@ class ClientController {
         var search = req.query.search;
         var name = req.query.name;
         var email = req.query.email;
-        var occupation = req.query.occupation;
-        var code = req.query.code;
 
         if (search && !name && !email && !occupation && !code) {
             query.where = {
@@ -53,11 +56,6 @@ class ClientController {
                     },
                     {
                         email: {
-                            [Op.like]: `%${search}%`
-                        }
-                    },
-                    {
-                        occupation: {
                             [Op.like]: `%${search}%`
                         }
                     }
@@ -74,18 +72,6 @@ class ClientController {
         if (email) {
             query.where.email = {
                 [Op.like]: `%${email}%`
-            }
-        }
-
-        if (occupation) {
-            query.where.occupation = {
-                [Op.like]: `%${occupation}%`
-            }
-        }
-
-        if (code) {
-            query.where.id = {
-                [Op.like]: `%${code}%`
             }
         }
 
@@ -116,7 +102,12 @@ class ClientController {
             name: req.body.name,
             email: req.body.email,
             phoneNumber: req.body.phoneNumber,
-            occupation: req.body.occupation ? req.body.occupation : "UNSPECIFIED",
+            zipCode: req.body.zipCode,
+            state: req.body.state,
+            city: req.body.city,
+            address: req.body.address,
+            number: req.body.number,
+            complement: req.body.complement,
         }, {
             where: {
                 id: id
