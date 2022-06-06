@@ -1,16 +1,16 @@
-const Employee = require('../models/Employee');
+const Client = require('../models/Client');
 const Sequelize = require('sequelize');
 
-class EmployeeController {
+class ClientController {
     async new(req, res) {
-        const employee = await Employee.create(req.body);
+        const client = await Client.create(req.body);
 
         return res.json({
-            id: employee.dataValues.id,
-            name: employee.dataValues.name,
-            email: employee.dataValues.email,
-            phoneNumber: employee.dataValues.phoneNumber,
-            occupation: employee.dataValues.occupation ? employee.dataValues.occupation : "UNSPECIFIED",
+            id: client.dataValues.id,
+            name: client.dataValues.name,
+            email: client.dataValues.email,
+            phoneNumber: client.dataValues.phoneNumber,
+            occupation: client.dataValues.occupation ? client.dataValues.occupation : "UNSPECIFIED",
         });
     }
 
@@ -25,9 +25,14 @@ class EmployeeController {
                 'id',
                 'name',
                 'email',
+                'isActive',
+                'zipCode',
                 'phoneNumber',
-                'occupation',
-                'createdAt',
+                'state',
+                'city',
+                'address',
+                'number',
+                'complement',
             ]
         };
 
@@ -84,9 +89,9 @@ class EmployeeController {
             }
         }
 
-        const employees = await Employee.findAll(query);
+        const clients = await Client.findAll(query);
 
-        return res.json(employees);
+        return res.json(clients);
     }
 
     async edit(req, res) {
@@ -96,18 +101,18 @@ class EmployeeController {
             return res.status(400).json({ error: 'Id não identificado!' });
         }
 
-        const employee = await Employee.findOne({
+        const client = await Client.findOne({
             where: {
                 id: id,
                 isActive: true
             }
         });
 
-        if (!employee) {
-            return res.status(404).json({ error: 'Funcionário não encontrado!' })
+        if (!client) {
+            return res.status(404).json({ error: 'Cliente não encontrado!' })
         }
 
-        Employee.update({
+        Client.update({
             name: req.body.name,
             email: req.body.email,
             phoneNumber: req.body.phoneNumber,
@@ -118,7 +123,7 @@ class EmployeeController {
             }
         })
         .then(function() {
-            return res.status(200).json({ success: 'Funcionário alterado com sucesso!' });
+            return res.status(200).json({ success: 'Cliente alterado com sucesso!' });
         }).catch((error) => {
             return res.status(500).json({ error: error });
         })
@@ -133,7 +138,7 @@ class EmployeeController {
             return res.status(400).json({ error: 'Id não identificado!' });
         }
 
-        const employee = await Employee.findOne({
+        const client = await Client.findOne({
             where: {
                 id: id,
                 isActive: true
@@ -142,16 +147,22 @@ class EmployeeController {
                 'id',
                 'name',
                 'email',
+                'isActive',
+                'zipCode',
                 'phoneNumber',
-                'occupation',
+                'state',
+                'city',
+                'address',
+                'number',
+                'complement',
             ]
         });
 
-        if (!employee) {
-            return res.status(404).json({ error: 'Funcionário não encontrado!' })
+        if (!client) {
+            return res.status(404).json({ error: 'Cliente não encontrado!' })
         }
 
-        return res.json(employee);
+        return res.json(client);
     }
 
     async delete(req, res) {
@@ -161,18 +172,18 @@ class EmployeeController {
             return res.status(400).json({ error: 'Id não identificado!' });
         }
 
-        const employee = await Employee.findOne({
+        const client = await Client.findOne({
             where: {
                 id: id,
                 isActive: true
             }
         });
 
-        if (!employee) {
-            return res.status(404).json({ error: 'Funcionário não encontrado!' });
+        if (!client) {
+            return res.status(404).json({ error: 'Cliente não encontrado!' });
         }
 
-        Employee.update({
+        Client.update({
             isActive: false,
             deletedAt: new Date()
         }, {
@@ -181,7 +192,7 @@ class EmployeeController {
             }
         })
         .then(function() {
-            return res.status(200).json({ success: 'Funcionário removido com sucesso!' });
+            return res.status(200).json({ success: 'Cliente removido com sucesso!' });
         }).catch((error) => {
             return res.status(500).json({ error: error });
         })
@@ -190,4 +201,4 @@ class EmployeeController {
     }
 }
 
-module.exports = new EmployeeController();
+module.exports = new ClientController();
