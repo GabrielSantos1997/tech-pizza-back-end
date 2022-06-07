@@ -45,7 +45,7 @@ class ClientController {
         var name = req.query.name;
         var email = req.query.email;
 
-        if (search && !name && !email && !occupation && !code) {
+        if (search && !name && !email) {
             query.where = {
                 ...query.where,
                 [Op.or]: [

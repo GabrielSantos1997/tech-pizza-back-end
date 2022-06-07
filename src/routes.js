@@ -23,6 +23,13 @@ routes.post('/client/new', ClientController.new);
 routes.put('/client/:id/edit', ClientController.edit);
 routes.delete('/client/:id/delete', ClientController.delete);
 
+const MenuController = require('./app/Controllers/MenuController');
+routes.get('/menu/list', MenuController.list);
+routes.get('/menu/:id/show', MenuController.show);
+routes.post('/menu/new', MenuController.new);
+routes.put('/menu/:id/edit', MenuController.edit);
+routes.delete('/menu/:id/delete', MenuController.delete);
+
 routes.get('/', (req, res) => {
     res.json({ message: 'hello world' })
 })
