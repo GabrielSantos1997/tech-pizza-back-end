@@ -30,6 +30,13 @@ routes.post('/menu/new', MenuController.new);
 routes.put('/menu/:id/edit', MenuController.edit);
 routes.delete('/menu/:id/delete', MenuController.delete);
 
+const OrderController = require('./app/Controllers/OrderController');
+routes.get('/order/list', OrderController.list);
+routes.get('/order/:id/show', OrderController.show);
+routes.post('/order/new', OrderController.new);
+routes.put('/order/:id/edit', OrderController.edit);
+routes.delete('/order/:id/delete', OrderController.delete);
+
 routes.get('/', (req, res) => {
     res.json({ message: 'hello world' })
 })

@@ -4,10 +4,11 @@ const User = require('../models/User');
 const Employee = require('../models/Employee');
 const Client = require('../models/Client');
 const Menu = require('../models/Menu');
+const Demand = require('../models/Demand');
 
 const databaseConfig = require('../../config/database');
 
-const models = [User, Employee, Client, Menu];
+const models = [User, Employee, Client, Menu, Demand];
 
 class Database {
     constructor() {
